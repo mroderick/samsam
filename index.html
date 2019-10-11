@@ -7,24 +7,25 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="None">
   
-  <link rel="shortcut icon" href="./img/favicon.ico">
+  <link rel="shortcut icon" href="img/favicon.ico">
   <title>samsam - samsam</title>
   <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
 
-  <link rel="stylesheet" href="./css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="./css/theme_extra.css" type="text/css" />
-  <link rel="stylesheet" href="./css/highlight.css">
+  <link rel="stylesheet" href="css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="css/theme_extra.css" type="text/css" />
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
   
   <script>
     // Current page data
     var mkdocs_page_name = "samsam";
     var mkdocs_page_input_path = "index.md";
-    var mkdocs_page_url = "/";
+    var mkdocs_page_url = null;
   </script>
   
-  <script src="./js/jquery-2.1.1.min.js"></script>
-  <script src="./js/modernizr-2.8.3.min.js"></script>
-  <script type="text/javascript" src="./js/highlight.pack.js"></script> 
+  <script src="js/jquery-2.1.1.min.js" defer></script>
+  <script src="js/modernizr-2.8.3.min.js" defer></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script> 
   
 </head>
 
@@ -38,7 +39,7 @@
         <a href="." class="icon icon-home"> samsam</a>
         <div role="search">
   <form id ="rtd-search-form" class="wy-form" action="./search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
   </form>
 </div>
       </div>
@@ -91,6 +92,9 @@
     <li>samsam</li>
     <li class="wy-breadcrumbs-aside">
       
+        <a href="https://github.com/sinonjs/samsam/edit/master/docs/index.md"
+          class="icon icon-github"> Edit on GitHub</a>
+      
     </li>
   </ul>
   <hr/>
@@ -109,19 +113,17 @@ strictness.</p>
 (including old and rowdy ones, like IE6) and Node. It will define itself as an
 AMD module if you want it to (i.e. if there's a <code>define</code> function available).</p>
 <h2 id="predicate-functions">Predicate functions</h2>
-<h3 id="isargumentsobject"><code>isArguments(object)</code></h3>
-<p>Returns <code>true</code> if <code>object</code> is an <code>arguments</code> object, <code>false</code> otherwise.</p>
+<h3 id="isargumentsvalue"><code>isArguments(value)</code></h3>
+<p>Returns <code>true</code> if <code>value</code> is an <code>arguments</code> object, <code>false</code> otherwise.</p>
 <h3 id="isnegzerovalue"><code>isNegZero(value)</code></h3>
 <p>Returns <code>true</code> if <code>value</code> is <code>-0</code>.</p>
-<h3 id="iselementobject"><code>isElement(object)</code></h3>
-<p>Returns <code>true</code> if <code>object</code> is a DOM element node. Unlike
-Underscore.js/lodash, this function will return <code>false</code> if <code>object</code> is an
+<h3 id="iselementvalue"><code>isElement(value)</code></h3>
+<p>Returns <code>true</code> if <code>value</code> is a DOM element node. Unlike
+Underscore.js/lodash, this function will return <code>false</code> if <code>value</code> is an
 <em>element-like</em> object, i.e. a regular object with a <code>nodeType</code> property that
 holds the value <code>1</code>.</p>
-<h3 id="isdateobject"><code>isDate(object)</code></h3>
-<p>Returns true if the object is a <code>Date</code>, or <em>date-like</em>. Duck typing of date
-objects work by checking that the object has a <code>getTime</code> function whose return
-value equals the return value from the object's <code>valueOf</code>.</p>
+<h3 id="issetvalue"><code>isSet(value)</code></h3>
+<p>Returns <code>true</code> if <code>value</code> is a <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set">Set</a>.</p>
 <h2 id="comparison-functions">Comparison functions</h2>
 <h3 id="identicalx-y"><code>identical(x, y)</code></h3>
 <p>Strict equality check according to EcmaScript Harmony's <code>egal</code>.</p>
@@ -134,14 +136,19 @@ observably distinguishable.</p>
 <p><code>identical</code> returns <code>true</code> when <code>===</code> is <code>true</code>, except for <code>-0</code> and
 <code>+0</code>, where it returns <code>false</code>. Additionally, it returns <code>true</code> when
 <code>NaN</code> is compared to itself.</p>
-<h3 id="deepequalobj1-obj2"><code>deepEqual(obj1, obj2)</code></h3>
+<h3 id="deepequalactual-expectation"><code>deepEqual(actual, expectation)</code></h3>
 <p>Deep equal comparison. Two values are "deep equal" if:</p>
 <ul>
 <li>They are identical</li>
 <li>They are both date objects representing the same time</li>
 <li>They are both arrays containing elements that are all deepEqual</li>
-<li>They are objects with the same set of properties, and each property
-  in <code>obj1</code> is deepEqual to the corresponding property in <code>obj2</code></li>
+<li>
+<p>They are objects with the same set of properties, and each property
+  in <code>actual</code> is deepEqual to the corresponding property in <code>expectation</code></p>
+</li>
+<li>
+<p><code>actual</code> can have <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Symbol">symbolic properties</a> that are missing from <code>expectation</code></p>
+</li>
 </ul>
 <h3 id="matchobject-matcher"><code>match(object, matcher)</code></h3>
 <p>Partial equality check. Compares <code>object</code> with matcher according a wide set of
@@ -274,19 +281,20 @@ samsam.match(el, {
   <div class="rst-versions" role="note" style="cursor: pointer">
     <span class="rst-current-version" data-toggle="rst-current-version">
       
+          <a href="https://github.com/sinonjs/samsam/" class="fa fa-github" style="float: left; color: #fcfcfc"> GitHub</a>
+      
       
       
     </span>
 </div>
     <script>var base_url = '.';</script>
-    <script src="./js/theme.js"></script>
-      <script src="./search/require.js"></script>
-      <script src="./search/search.js"></script>
+    <script src="js/theme.js" defer></script>
+      <script src="search/main.js" defer></script>
 
 </body>
 </html>
 
 <!--
-MkDocs version : 0.17.2
-Build Date UTC : 2018-01-26 20:09:05
+MkDocs version : 1.0.4
+Build Date UTC : 2019-10-11 09:41:42
 -->
